@@ -207,4 +207,3 @@ select last_name, department_id, salary
 from employees
 where department_id > 80
 order by department_id asc, salary desc; --asc 오르차순 desc 내림차순
-
