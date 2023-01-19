@@ -269,7 +269,7 @@ from employees
 
 select hire_date
 from employees
-where hire_date = ' 2003/06/17';
+where hire_date = '2003/06/17';
 
 select salary
 from employees
@@ -293,3 +293,120 @@ from employees;
 select last_name, hire_date, to_char(next_day(add_months(hire_date, 3), 2), 'YYYY.MM.DD')
 from employees
 order by hire_date asc;
+
+select to_char(salary)
+from employees;
+
+select to_char(salary, '$99,999.99'), to_char(salary, '$00,000.00')
+from employees
+where last_name = 'Ernst';
+
+select to_char(1237, 'L9999')
+from dual;
+
+select last_name || 'earns ' ||
+    to_char(salary, 'fmL99999') || ' monthly but wants ' ||
+    to_char(salary * 3, 'fmL99999') || '.'
+from employees;
+
+select last_name, hire_date
+from employees
+where hire_date = to_date('Sep 21, 2005', 'Mon dd, yyyy');
+
+select to_number('1237')
+from dual;
+
+select to_number('1,237.12')
+from dual;
+
+select nul(null, 0)
+from dual;
+
+select job_id, nvl(commission_pct, 0)
+from employees;
+
+select last_name, job_id, (salary * nvl(commission_pct, 1)) * 12
+from employees;
+
+select last_name, job_id,
+coalesce(to_char(commission_pct), to_char(manager_id), 'None')
+from employees;
+
+select decode(salary, 'a', 1)
+from employees;
+
+select decode(salary, 'a', 1, 0)
+from employees;
+
+select decode(job_id, 1, 1)
+from employees;
+
+select case job_id when '1' then 1
+                    when '2' then 2
+                    else 0
+        end grade
+from employees;
+
+select last_name, hire_date,
+    case when hire_date <= '2005/12/31' then '100만원'
+    else '10만원' end gift
+from employees
+order by gift, hire_date;
+
+--5장 시작
+
+select avg(salary), max(salary), min(salary), sum(salary)
+from employees;
+
+select min(hire_date), max(hire_date)
+from employees;
+
+select max(salary) - min(salary)
+from employees;
+
+select count(*)
+from employees
+where department_id = 70;
+
+select count(employee_id)
+from employees;
+
+select avg(nvl(comission_pct), 0)
+from employees;
+
+select count(distinct manager_id)
+from employees;
+
+select department_id, count(employee_id)
+from employees
+group by department_id
+order by department_id;
+
+select job_id, count(employee_id)
+from employees
+group by job_id;
+
+select department_id, max(salary)
+from employees
+group by department_id
+having department_id >70
+order by department_id desc;
+
+sleect department_id, max(salary)
+from employees
+group by department_id
+having max(salary) > 10000;
+
+select job_id, sum(salary) payroll
+from employees
+where job_id not like '%REP%'
+group by job_id
+having sum(salary) > 13000
+order by payroll;
+
+select manager_id, min(salary)
+from employees
+where manager_id is not null
+group by manager_id
+having min(salary) > 6000
+order by min(salary) desc;

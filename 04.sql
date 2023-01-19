@@ -148,7 +148,7 @@ from dual;--null은 3가지 타입을 다 가지고 있다.
 
 select last_name, job_id,
     coalesce(to_char(commission_pct), to_char(manager_id), 'None')
-from employees;
+from employees;--필드값이null이면 다음 조건으로 출력
 
 select last_name, salary,
     decode(trunc(salary / 2000), 
@@ -239,12 +239,14 @@ order by case day
 --      사원들의 이름, 입사일, 상품권 금액을 조회하라.
 
 select last_name, hire_date,
-    case when months_between('2004/12/31', hire_date) > 0 then '100만원'
-        when months_between('2004/12/31', hire_date) <= 0 then '10만원'
+    case when months_between('2005/12/31', hire_date) >= 0 then '100만원'
+        when months_between('2005/12/31', hire_date) < 0 then '10만원'
     end
 from employees;
     
-
-
-
-
+    
+select last_name, hire_date,
+    case when hire_date <= '2005/12/31' then '100만원'
+        else '10만원' end gift
+from employees
+order by gift, hire_date;
