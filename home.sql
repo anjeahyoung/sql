@@ -410,3 +410,163 @@ where manager_id is not null
 group by manager_id
 having min(salary) > 6000
 order by min(salary) desc;
+
+
+select max(ave(salary))
+from employees
+group by department_id;
+
+select department_id, round(avg(salary))
+from employees
+group by department_id;
+
+select department_id, round(avg(salary))
+from employees
+group by department_id;
+
+select to_char(hire_date, 'yyyy') hire_year, conut(*) emp_cnt
+from employees
+where to_char(hire_date, 'yyyy') in (2001, 2002, 2003)
+group by to_char(hire_date, 'yyyy')
+order by hire_year;
+
+select sum(decode(to_char(hire_date, 'yyyy'), '2001', 1, 0)) "2001",
+        sum(decode(to_char(hire_date, 'yyyy'), '2002', 1, 0)) "2002",
+        sum(decode(to_char(hire_date, 'yyyy'), '2003', 1, 0)) "2003"
+from employees;
+
+select job_id, sum(decode(department_id, 20, salary)) "20",
+                sum(decode(department_id, 50, salary)) "50",
+                sum(decode(department_id, 80, salary)) "80"
+from employees
+group by job_id;
+
+--6장 시작
+
+select department_id, department_name, location_id
+from departments;
+
+select location_id, city
+from locations;
+
+select department_id, department_id, location_id, city
+from departments natural join locations;
+
+select department_id, department_name, location_id, city
+from departments natural join locations
+where department_id in (20, 50);
+
+select employee_id, last_name, department_id, location_id
+from employees join departments
+using (department_id);
+
+select last_name, department_id
+from employees 
+where department_id is null;
+
+select employee_id, last_name, department_id, location_id
+from employees natural join departments;
+
+select locations.city, departments.department_name
+from locations join departments
+using (location_id)
+where location_id = 1400;
+
+select l.city, d.department_name
+from locations l join departments d
+using(location_id)
+where location_id = 1400;
+
+select l.city, d.department_name, location_id
+from locations l join departments d
+using(location_id)
+where d.location_id = 1400;
+
+select e.last_name, d.department_name
+from employees e join departments d
+using(department_id)
+where e.manager_id = 100;
+
+select e.employee_id, e.last_name, e.department_id,
+    d.department_id, d.location_id
+from employees e join departments d
+on(e.department_id = d.department_id);
+
+select employee_id, city, department_name
+from employees e join departments d
+on e.department_id = d.department_id
+join locations l
+on d.location_id = l.location_id;
+
+select employee_id, city, department_name
+from employees e join departments d
+using (departmnet_id)
+join locations l
+using(location_id);
+
+select e.last_name, e.job_id, d.departmen_id,
+    d.department_name, l.city
+from employees e join departments d
+on e.department_id = d.department_id
+join locations l
+on d.location_id = l.location_id
+where l.city = 'Toronto';
+
+select e.last_name, e.salary, e.job_id
+from employees e join jobs j
+on e.salary between j.min_salary and j.max_salary
+and j.job_id = 'IT_PROG';
+
+select worker.last_name emp, manager.last_name mgr
+from employees worker join employees manager
+on worker.manager_id = manager.employee_id;
+
+select e.department_id, e.last_name, p.last_name
+from employees e join emloyees p
+on e.department_id = p.department_id and
+e.employee_id <> p.employee_id;
+
+select e.last_name, e.hire_date
+from employees e join emoloyees d
+on d.last_name = 'Davies'
+and d.hire_date< e.hire_date
+
+select w.last_name, w.hire_date, m.last_name, m.hire_date
+from employees w join employees m 
+on w.manager_id = m.employee_id
+and w.hire_date < m.hire_date;
+
+select e..last_name, e.department_id, d.department_name
+from employees e join departments d
+on e.department_id = d.department_id;
+
+select e.last_name, e.department_id, d.department_name
+from employees e left outer join departments d
+on e.department_id = d.department_id;
+
+select e.last_name, e.department_id, d.department_name
+from employees e, departments d
+where e.department_id(+) = d.department_id;
+
+--7장 시작
+
+select last_anem, salary
+from employees
+where salary > (select salary
+                from employees
+                where last_name = 'Abel');
+
+select last_name, job_id, slaary
+from employees
+where job_id = (select job_id
+                from employees
+                where last_name = 'Ernst')
+and salary > (select salary
+                from employees
+                where last_name = 'Ernst');
+                
+select last_name, job_id, department_id
+from employees
+where last_name =(select last_name
+                    from employees
+                    where last_name = 'Kochhar');
