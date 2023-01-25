@@ -22,7 +22,7 @@ from employees
 where manger_id = (select employee_id
                     from employees
                     where last_name = 'Kochhar');
-                    
+--1/20 복습완료                    
 --과제:IT부서에서 일하는 사원들의 부서번호, 이름, 직업을 조회하라.
 
 select department_id, last_name, job_id
